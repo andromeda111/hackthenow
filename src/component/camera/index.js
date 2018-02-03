@@ -1,6 +1,7 @@
 import React from 'react'
 
 let capturedImage
+let personResults = []
 
 class Camera extends React.Component {
 	constructor(props) {
@@ -18,6 +19,7 @@ class Camera extends React.Component {
 			this.createImageBlob(canvas).then(blob => {
 				capturedImage = blob
 				console.log(capturedImage)
+				this.getSimilarPeople()
 			})
 		})
 
@@ -34,15 +36,47 @@ class Camera extends React.Component {
 	createImageBlob = canvas => {
 		return new Promise(resolve => {
 			let file = canvas.toBlob(blob => {
-				resolve(URL.createObjectURL(blob))
+				resolve(blob)
 			})
 		})
 	}
 
-	onChange = e => {
-		e.preventDefault()
+	getSimilarPeople = () => {
+		let blob = capturedImage
+		let sourceImg = new FormData(document.forms[0])
+
+		sourceImg.append('sourceImg', blob)
+
+		$.ajax({
+			url:
+				'https://api.cognitive.microsoft.com/bing/v7.0/images/details?modules=RecognizedEntities',
+			beforeSend: xhrObj => {
+				// Request headers
+				xhrObj.setRequestHeader('Content-Type', 'multipart/form-data')
+				xhrObj.setRequestHeader(
+					'Ocp-Apim-Subscription-Key',
+					'3873387e25024b2ca2ec0ce5a31fe915'
+				)
+			},
+			type: 'POST',
+			processData: false,
+			data: sourceImg,
+		}).done(res => {
+			let resultsArray =
+				res.recognizedEntityGroups.value[1].recognizedEntityRegions[0]
+					.matchingEntities
+
+			let matches = resultsArray.filter(result => {
+				return result.entity.jobTitle.toLowerCase().includes('act')
+			})
+
+			personResults = matches
+		})
 	}
 
+	/***********
+		HTML
+	************/
 	render() {
 		return (
 			<div className="">

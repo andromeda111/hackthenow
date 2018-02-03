@@ -136,21 +136,24 @@ class Camera extends React.Component {
 					if (err) return console.log(err)
 					let id = res.body.results[0].id
 					ids.push(id)
-					this.getMoviesWithPerson()
 				})
 		})
+		setTimeout(() => this.getMoviesWithPerson(), 1500)
 	}
 
 	getMoviesWithPerson() {
-		let genres = '35|12'
-		let people = ids.join('|')
-
-		$.ajax({
-			url: `${getMoviesRootURL}&with_genres=${genres}&with_cast=${people}`,
-			type: 'GET',
-		}).done(res => {
-			console.log(res)
+		let genres = '35|28'
+		// let people = ids.join('|')
+		let results = []
+		ids.map(id => {
+			$.ajax({
+				url: `${getMoviesRootURL}&with_genres=${genres}&with_cast=${id}`,
+				type: 'GET',
+			}).done(res => {
+				results.push(res.results[0])
+			})
 		})
+		console.log(results)
 	}
 
 	/***********

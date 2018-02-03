@@ -1,4 +1,5 @@
 import React from 'react'
+import Camera from '../camera'
 
 class App extends React.Component {
 	constructor(props) {
@@ -13,7 +14,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="app">
-				<input type="file" onChange={e => this.onChange(e)} />
+				<Camera />
 			</div>
 		)
 	}

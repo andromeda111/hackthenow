@@ -1,5 +1,9 @@
 import React from 'react'
+import Movies from '../movies'
+import Actors from '../actors'
+import Emotion from '../emotion'
 import superagent from 'superagent'
+import { renderIf } from '../../lib/util.js'
 
 let genreMap = {
 	action: 28,
@@ -38,7 +42,13 @@ let ids
 class Camera extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {}
+		this.state = {
+			highestEmotion: '',
+			movieResults: [],
+			actorResults: [],
+			loading: false,
+			finished: false
+		}
 	}
 
 	componentDidMount = () => {
@@ -49,6 +59,7 @@ class Camera extends React.Component {
 		document.getElementById('snap').addEventListener('click', () => {
 			context.drawImage(video, 0, 0, 320, 240)
 			this.createImageBlob(canvas).then(blob => {
+				this.setState({ loading: true })
 				capturedImage = blob
 				this.emotions(blob)
 				this.getSimilarPeople()
@@ -82,7 +93,7 @@ class Camera extends React.Component {
 			processData: false,
 			data: blob
 		})
-			.done(function(data) {
+			.done(data => {
 				emotions = data[0].scores
 				let keys = Object.keys(emotions)
 				console.log('emotions', emotions)
@@ -96,9 +107,10 @@ class Camera extends React.Component {
 				}
 				setTimeout(() => {
 					highestEmo = highest
+					this.setState({ highestEmotion: highestEmo })
 				}, 1500)
 			})
-			.fail(function(err) {
+			.fail(err => {
 				console.log('nope', err)
 			})
 	}
@@ -127,6 +139,7 @@ class Camera extends React.Component {
 			})
 
 			personResults = matches
+			this.setState({ actorResults: personResults })
 			this.getPersonId()
 		})
 	}
@@ -163,7 +176,8 @@ class Camera extends React.Component {
 				results.push(res.results[0])
 			})
 		})
-		console.log(results)
+		this.setState({ movieResults: results })
+		this.setState({ loading: false, finished: true })
 	}
 
 	/***********
@@ -171,9 +185,18 @@ class Camera extends React.Component {
 	************/
 	render() {
 		return (
-			<div className="">
-				<video id="video" width="320" height="240" autoPlay />
-				<button id="snap">Snap Photo</button>
+			<div className="camera">
+				<Movies movies={this.state.movieResults} />
+				<Emotion emotions={this.state.highestEmotion} />
+				<Actors actors={this.state.actorResults} />
+				{renderIf(
+					!this.state.loading && !this.state.finished,
+					<div>
+						<video id="video" width="320" height="240" autoPlay />
+						<button id="snap">Snap Photo</button>
+					</div>
+				)}
+				{renderIf(this.state.loading, <div>loading div</div>)}
 				<canvas id="canvas" width="320" height="240" />
 			</div>
 		)

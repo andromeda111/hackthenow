@@ -1,4 +1,5 @@
 import React from 'react'
+import superagent from 'superagent'
 
 let movieAPIKey = 'a6de91618bcf933ac45ea50b3a3eda26'
 let getMoviesRootURL = `https://api.themoviedb.org/3/discover/movie?api_key=${movieAPIKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
@@ -6,6 +7,7 @@ let capturedImage
 let highestEmo
 let emotions
 let personResults = []
+let ids
 
 class Camera extends React.Component {
 	constructor(props) {
@@ -115,13 +117,33 @@ class Camera extends React.Component {
 
 			personResults = matches
 			console.log(personResults)
-			this.getMoviesWithPerson()
+			this.getPersonId()
+		})
+	}
+
+	getPersonId = () => {
+		ids = []
+		let names = []
+		personResults.map(actor => {
+			names.push(actor.entity.name.split(' ').join('-'))
+		})
+		names.map(name => {
+			superagent
+				.get(
+					`https://api.themoviedb.org/3/search/person?api_key=a6de91618bcf933ac45ea50b3a3eda26&language=en-US&query=${name}&page=1&include_adult=false`
+				)
+				.end((err, res) => {
+					if (err) return console.log(err)
+					let id = res.body.results[0].id
+					ids.push(id)
+					this.getMoviesWithPerson()
+				})
 		})
 	}
 
 	getMoviesWithPerson() {
-		let genres = '35'
-		let people = '3061'
+		let genres = '35|12'
+		let people = ids.join('|')
 
 		$.ajax({
 			url: `${getMoviesRootURL}&with_genres=${genres}&with_cast=${people}`,

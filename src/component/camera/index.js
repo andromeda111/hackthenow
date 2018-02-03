@@ -1,9 +1,10 @@
 import React from 'react'
-
+import superagent from 'superagent'
 let capturedImage
 let highestEmo
 let emotions
 let personResults = []
+let ids
 
 class Camera extends React.Component {
 	constructor(props) {
@@ -97,7 +98,28 @@ class Camera extends React.Component {
 			})
 
 			personResults = matches
+			this.getPersonId()
 		})
+	}
+
+	getPersonId = () => {
+		ids = []
+		let names = []
+		personResults.map(actor => {
+			names.push(actor.entity.name.split(' ').join('-'))
+		})
+		names.map(name => {
+			superagent
+				.get(
+					`https://api.themoviedb.org/3/search/person?api_key=a6de91618bcf933ac45ea50b3a3eda26&language=en-US&query=${name}&page=1&include_adult=false`
+				)
+				.end((err, res) => {
+					if (err) return console.log(err)
+					let id = res.body.results[0].id
+					ids.push(id)
+				})
+		})
+		return ids
 	}
 
 	/***********

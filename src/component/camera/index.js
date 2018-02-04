@@ -52,6 +52,7 @@ class Camera extends React.Component {
 			movieResults: [],
 			actorResults: [],
 			loading: false,
+			moviesLoaded: false,
 			finished: false,
 		}
 	}
@@ -123,8 +124,6 @@ class Camera extends React.Component {
 				setTimeout(() => {
 					highestEmo = highest
 					this.setState({ highestEmotion: highestEmo })
-					let canvas = document.getElementById('emotion-canvas')
-					context.drawImage(video, 0, 0, 320, 240)
 				}, 1500)
 			})
 			.fail(err => {
@@ -204,7 +203,11 @@ class Camera extends React.Component {
 				$('.render-movies').trigger('click')
 				console.log(this.state.movieResults)
 			})
-			this.setState({ loading: false, finished: true })
+			this.setState({
+				loading: false,
+				finished: true,
+				moviesLoaded: true,
+			})
 			$('.canvas-div').show()
 		}, 2000)
 	}
@@ -244,7 +247,11 @@ class Camera extends React.Component {
 						</h2>
 					</div>
 				</div>
-				<Actors actors={this.state.actorResults} />
+
+				{renderIf(
+					this.state.moviesLoaded,
+					<Actors actors={this.state.actorResults} />
+				)}
 			</div>
 		)
 	}

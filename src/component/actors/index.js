@@ -21,7 +21,8 @@ class Actors extends React.Component {
                             </div>
                             <div className="actor-details">
                                 <div className="actor-name">
-                                    {actor.entity.name}
+                                    {actor.entity.name} - Similarity:{' '}
+                                    {Math.round(actor.matchConfidence * 100)}%
                                 </div>
                                 <p>{actor.entity.description}</p>
                             </div>

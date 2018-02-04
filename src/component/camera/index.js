@@ -60,6 +60,7 @@ class Camera extends React.Component {
 			context.drawImage(video, 0, 0, 320, 240)
 			this.createImageBlob(canvas).then(blob => {
 				this.setState({ loading: true })
+				$('#canvas').hide()
 				capturedImage = blob
 				this.emotions(blob)
 				this.getSimilarPeople()
@@ -108,6 +109,8 @@ class Camera extends React.Component {
 				setTimeout(() => {
 					highestEmo = highest
 					this.setState({ highestEmotion: highestEmo })
+					let canvas = document.getElementById('emotion-canvas')
+					context.drawImage(video, 0, 0, 320, 240)
 				}, 1500)
 			})
 			.fail(err => {
@@ -182,6 +185,7 @@ class Camera extends React.Component {
 				console.log(this.state.movieResults)
 			})
 			this.setState({ loading: false, finished: true })
+			$('#canvas').show()
 		}, 2000)
 	}
 
@@ -194,8 +198,7 @@ class Camera extends React.Component {
 		return (
 			<div className="camera">
 				<Movies movies={this.state.movieResults} />
-				<Emotion emotions={this.state.highestEmotion} />
-				<Actors actors={this.state.actorResults} />
+
 				{renderIf(
 					!this.state.loading && !this.state.finished,
 					<div>
@@ -211,8 +214,10 @@ class Camera extends React.Component {
 				>
 					again!
 				</button>
-				{renderIf(this.state.loading, <div>loading div</div>)}
+				{renderIf(this.state.loading, <div>loading</div>)}
 				<canvas id="canvas" width="320" height="240" />
+				<Emotion emotions={this.state.highestEmotion} />
+				<Actors actors={this.state.actorResults} />
 			</div>
 		)
 	}

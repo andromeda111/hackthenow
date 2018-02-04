@@ -1,37 +1,45 @@
 .actor-container {
-    display: flex;
-    align-items: center;
-    border-top: 1px solid gray;
-    padding-top: 5px;
-    &:last-of-type {
-        border-bottom: 1px solid gray;
-    }
-    .actor-img {
-        img {
-            width: 100px;
-        }
-        margin-right: 16px;
-    }
-    .actor-details {
-        display: flex;
-        flex-direction: column;
-        .actor-name {
-            font-weight: bold;
-        }
-        p {
-            font-size: 12px;
-        }
-    }
+	display: flex;
+	align-items: center;
+	border-top: 1px solid gray;
+	padding-top: 5px;
+	&:last-of-type {
+		border-bottom: 1px solid gray;
+	}
+	.actor-img {
+		img {
+			width: 100px;
+		}
+		margin-right: 16px;
+	}
+	.actor-details {
+		display: flex;
+		flex-direction: column;
+		.actor-name {
+			font-weight: bold;
+		}
+		p {
+			font-size: 12px;
+		}
+	}
 }
 
 .movies {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    .poster {
-        padding: 16px;
-        img {
-            width: 100px;
-        }
-    }
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	.poster {
+		padding: 16px;
+		img {
+			width: 100px;
+		}
+	}
+}
+
+#video,
+.canvas {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateY(-50%) translateX(-50%);
 }

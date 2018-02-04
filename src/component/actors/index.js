@@ -17,13 +17,14 @@ class Actors extends React.Component {
                     return (
                         <div key={idx} className="actor-container">
                             <div className="actor-img">
-                                <img
-                                    src={actor.entity.url}
-                                    height="500"
-                                    width="500"
-                                />
+                                <img src={actor.entity.image.url} />
                             </div>
-                            <div>{actor.entity.name}</div>
+                            <div className="actor-details">
+                                <div className="actor-name">
+                                    {actor.entity.name}
+                                </div>
+                                <p>{actor.entity.description}</p>
+                            </div>
                         </div>
                     )
                 })}

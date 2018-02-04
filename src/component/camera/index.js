@@ -60,7 +60,7 @@ class Camera extends React.Component {
 			context.drawImage(video, 0, 0, 320, 240)
 			this.createImageBlob(canvas).then(blob => {
 				this.setState({ loading: true })
-				$('#canvas').hide()
+				$('.canvas-div').hide()
 				capturedImage = blob
 				this.emotions(blob)
 				this.getSimilarPeople()
@@ -185,7 +185,7 @@ class Camera extends React.Component {
 				console.log(this.state.movieResults)
 			})
 			this.setState({ loading: false, finished: true })
-			$('#canvas').show()
+			$('.canvas-div').show()
 		}, 2000)
 	}
 
@@ -206,17 +206,15 @@ class Camera extends React.Component {
 						<button id="snap">Snap Photo</button>
 					</div>
 				)}
-				<button
-					onClick={() => {
-						this.setState({ loading: false, finished: false })
-					}}
-					id="snap"
-				>
-					again!
-				</button>
 				{renderIf(this.state.loading, <div>loading</div>)}
-				<canvas id="canvas" width="320" height="240" />
-				<Emotion emotions={this.state.highestEmotion} />
+				<div className="canvas-div" style={{ display: 'block', height: '300px', width: '100%' }}>
+					<div className="canvas">
+						<canvas id="canvas" width="320" height="240" />
+						<h2 style={{ textAlign: 'center', fontWeight: 300 }}>
+							{this.state.highestEmotion}
+						</h2>
+					</div>
+				</div>
 				<Actors actors={this.state.actorResults} />
 			</div>
 		)

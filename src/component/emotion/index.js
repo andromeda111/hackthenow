@@ -8,11 +8,7 @@ class Emotion extends React.Component {
 
   render () {
     let { emotion } = this.props
-    return (
-      <div className='emotion'>
-        <canvas id='emotion-canvas' width='320' height='240' />
-      </div>
-    )
+    return <div className='emotion' />
   }
 }
 

@@ -176,14 +176,21 @@ class Camera extends React.Component {
 				results.push(res.results[0])
 			})
 		})
-		this.setState({ movieResults: results })
-		this.setState({ loading: false, finished: true })
+		setTimeout(() => {
+			this.setState({ movieResults: results }, () => {
+				$('.render-movies').trigger('click')
+				console.log(this.state.movieResults)
+			})
+			this.setState({ loading: false, finished: true })
+		}, 2000)
 	}
 
 	/***********
 		HTML
 	************/
 	render() {
+		console.log(this.state.movieResults[0])
+		console.dir(this.state.movieResults)
 		return (
 			<div className="camera">
 				<Movies movies={this.state.movieResults} />
@@ -196,6 +203,14 @@ class Camera extends React.Component {
 						<button id="snap">Snap Photo</button>
 					</div>
 				)}
+				<button
+					onClick={() => {
+						this.setState({ loading: false, finished: false })
+					}}
+					id="snap"
+				>
+					again!
+				</button>
 				{renderIf(this.state.loading, <div>loading div</div>)}
 				<canvas id="canvas" width="320" height="240" />
 			</div>

@@ -22,15 +22,17 @@ let genreMap = {
 	war: 10752,
 }
 let emotionMap = {
-	anger: [genreMap.crime, genreMap.action],
+	anger: [genreMap.crime, genreMap.action, genreMap.scienceFiction],
 	contempt: [genreMap.war, genreMap.action],
 	disgust: [genreMap.horror, genreMap.action],
-	fear: [genreMap.thriller],
+	fear: [genreMap.thriller, genreMap.scienceFiction],
 	happiness: [
 		genreMap.romance,
 		genreMap.family,
 		genreMap.comedy,
 		genreMap.adventure,
+		genreMap.scienceFiction,
+		genreMap.romance,
 	],
 	neutral: [genreMap.documentary, genreMap.scienceFiction, genreMap.family],
 	sadness: [genreMap.drama],

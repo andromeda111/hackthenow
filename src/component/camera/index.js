@@ -19,17 +19,22 @@ let genreMap = {
 	romance: 10749,
 	scienceFiction: 878,
 	thriller: 53,
-	war: 10752
+	war: 10752,
 }
 let emotionMap = {
 	anger: [genreMap.crime, genreMap.action],
 	contempt: [genreMap.war, genreMap.action],
 	disgust: [genreMap.horror, genreMap.action],
 	fear: [genreMap.thriller],
-	happiness: [genreMap.romance, genreMap.family, genreMap.comedy, genreMap.adventure],
+	happiness: [
+		genreMap.romance,
+		genreMap.family,
+		genreMap.comedy,
+		genreMap.adventure,
+	],
 	neutral: [genreMap.documentary, genreMap.scienceFiction, genreMap.family],
 	sadness: [genreMap.drama],
-	surprise: [genreMap.mystery, genreMap.fantasy, genreMap.adventure]
+	surprise: [genreMap.mystery, genreMap.fantasy, genreMap.adventure],
 }
 let movieAPIKey = 'a6de91618bcf933ac45ea50b3a3eda26'
 let getMoviesRootURL = `https://api.themoviedb.org/3/discover/movie?api_key=${movieAPIKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
@@ -47,7 +52,7 @@ class Camera extends React.Component {
 			movieResults: [],
 			actorResults: [],
 			loading: false,
-			finished: false
+			finished: false,
 		}
 	}
 
@@ -68,10 +73,12 @@ class Camera extends React.Component {
 		})
 
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-				video.src = window.URL.createObjectURL(stream)
-				video.play()
-			})
+			navigator.mediaDevices
+				.getUserMedia({ video: true })
+				.then(stream => {
+					video.src = window.URL.createObjectURL(stream)
+					video.play()
+				})
 		}
 	}
 
@@ -85,14 +92,21 @@ class Camera extends React.Component {
 
 	emotions = blob => {
 		$.ajax({
-			url: 'https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize',
+			url:
+				'https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize',
 			beforeSend: function(xhrObj) {
-				xhrObj.setRequestHeader('Content-Type', 'application/octet-stream')
-				xhrObj.setRequestHeader('Ocp-Apim-Subscription-Key', 'e7afc5c83a4e4ef8adb3859baf2d10a6')
+				xhrObj.setRequestHeader(
+					'Content-Type',
+					'application/octet-stream'
+				)
+				xhrObj.setRequestHeader(
+					'Ocp-Apim-Subscription-Key',
+					'e7afc5c83a4e4ef8adb3859baf2d10a6'
+				)
 			},
 			type: 'POST',
 			processData: false,
-			data: blob
+			data: blob,
 		})
 			.done(data => {
 				emotions = data[0].scores
@@ -125,17 +139,23 @@ class Camera extends React.Component {
 		sourceImg.append('sourceImg', blob)
 
 		$.ajax({
-			url: 'https://api.cognitive.microsoft.com/bing/v7.0/images/details?modules=RecognizedEntities',
+			url:
+				'https://api.cognitive.microsoft.com/bing/v7.0/images/details?modules=RecognizedEntities',
 			beforeSend: xhrObj => {
 				// Request headers
 				xhrObj.setRequestHeader('Content-Type', 'multipart/form-data')
-				xhrObj.setRequestHeader('Ocp-Apim-Subscription-Key', '3873387e25024b2ca2ec0ce5a31fe915')
+				xhrObj.setRequestHeader(
+					'Ocp-Apim-Subscription-Key',
+					'3873387e25024b2ca2ec0ce5a31fe915'
+				)
 			},
 			type: 'POST',
 			processData: false,
-			data: sourceImg
+			data: sourceImg,
 		}).done(res => {
-			let resultsArray = res.recognizedEntityGroups.value[1].recognizedEntityRegions[0].matchingEntities
+			let resultsArray =
+				res.recognizedEntityGroups.value[1].recognizedEntityRegions[0]
+					.matchingEntities
 
 			let matches = resultsArray.filter(result => {
 				return result.entity.jobTitle.toLowerCase().includes('act')
@@ -174,7 +194,7 @@ class Camera extends React.Component {
 		ids.map(id => {
 			$.ajax({
 				url: `${getMoviesRootURL}&with_genres=${genres}&with_cast=${id}`,
-				type: 'GET'
+				type: 'GET',
 			}).done(res => {
 				results.push(res.results[0])
 			})
@@ -201,13 +221,22 @@ class Camera extends React.Component {
 
 				{renderIf(
 					!this.state.loading && !this.state.finished,
-					<div>
+					<div className="stream">
 						<video id="video" width="320" height="240" autoPlay />
 						<button id="snap">Snap Photo</button>
 					</div>
 				)}
-				{renderIf(this.state.loading, <div>loading</div>)}
-				<div className="canvas-div" style={{ display: 'block', height: '300px', width: '100%' }}>
+				{renderIf(
+					this.state.loading,
+					<div className="loading">
+						Analyzing your beautiful face to find you the perfect
+						movie for your current mood.
+					</div>
+				)}
+				<div
+					className="canvas-div"
+					style={{ display: 'block', height: '300px', width: '100%' }}
+				>
 					<div className="canvas">
 						<canvas id="canvas" width="320" height="240" />
 						<h2 style={{ textAlign: 'center', fontWeight: 300 }}>

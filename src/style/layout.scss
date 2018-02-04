@@ -26,13 +26,13 @@
 }
 
 .movies {
-	margin-top: 100px;
+	margin-top: 50px;
 	padding: 10px 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	background-color: rgba(86, 77, 77, 0.5);
+	background-color: #001d2a;
 	border-top: 2px solid #eee;
 	border-bottom: 2px solid #eee;
 
@@ -44,10 +44,12 @@
 	}
 }
 
-#video,
-.canvas {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translateY(-50%) translateX(-50%);
+.canvas-div,
+.stream,
+.loading {
+	display: block;
+	height: 300px;
+	width: 100%;
+	text-align: center;
+	padding: 20px 0;
 }

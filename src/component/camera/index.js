@@ -104,7 +104,7 @@ class Camera extends React.Component {
 				)
 				xhrObj.setRequestHeader(
 					'Ocp-Apim-Subscription-Key',
-					'e7afc5c83a4e4ef8adb3859baf2d10a6'
+					'2d90b8a338334a0eb067312fc27a9ad1'
 				)
 			},
 			type: 'POST',

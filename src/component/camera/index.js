@@ -23,7 +23,7 @@ let genreMap = {
 }
 let emotionMap = {
 	anger: [genreMap.crime, genreMap.action, genreMap.scienceFiction],
-	contempt: [genreMap.war, genreMap.action],
+	contempt: [genreMap.war, genreMap.action, genreMap.drama],
 	disgust: [genreMap.horror, genreMap.action],
 	fear: [genreMap.thriller, genreMap.scienceFiction],
 	happiness: [
@@ -35,8 +35,13 @@ let emotionMap = {
 		genreMap.romance,
 	],
 	neutral: [genreMap.documentary, genreMap.scienceFiction, genreMap.family],
-	sadness: [genreMap.drama],
-	surprise: [genreMap.mystery, genreMap.fantasy, genreMap.adventure],
+	sadness: [genreMap.drama, genreMap.comedy],
+	surprise: [
+		genreMap.mystery,
+		genreMap.fantasy,
+		genreMap.adventure,
+		genreMap.documentary,
+	],
 }
 let movieAPIKey = 'a6de91618bcf933ac45ea50b3a3eda26'
 let getMoviesRootURL = `https://api.themoviedb.org/3/discover/movie?api_key=${movieAPIKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
